@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { AppShell } from "@/components/AppShell";
 import { Chip } from "@/components/Chip";
 import { FeatureCard } from "@/components/FeatureCard";
@@ -99,6 +100,41 @@ export default function DashboardPage() {
         </div>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="bg-surface border border-border rounded-2xl p-6 hover-soft">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
+              Quick links
+            </div>
+            <div className="mt-4 grid gap-2">
+              <Link
+                to="/app/info"
+                className="text-sm font-semibold text-ink underline underline-offset-4"
+              >
+                Info
+              </Link>
+              <Link
+                to="/app/cron"
+                className="text-sm font-semibold text-ink underline underline-offset-4"
+              >
+                Cron jobs
+              </Link>
+              <Link
+                to="/app/instructions"
+                className="text-sm font-semibold text-ink underline underline-offset-4"
+              >
+                Instructions
+              </Link>
+              <Link
+                to="/app/memory"
+                className="text-sm font-semibold text-ink underline underline-offset-4"
+              >
+                Memory
+              </Link>
+            </div>
+            <p className="mt-6 text-sm text-muted">
+              Everything is reachable from here.
+            </p>
+          </div>
+
           <FeatureCard
             title="Agents"
             subtitle="(Coming soon) Separate roles for research, coding, ops, and reporting."
@@ -106,10 +142,6 @@ export default function DashboardPage() {
           <FeatureCard
             title="Tasks"
             subtitle="(Coming soon) Assign, track progress, and attach logs to tasks."
-          />
-          <FeatureCard
-            title="Metrics"
-            subtitle="(Coming soon) Daily throughput, response times, and output quality signals."
           />
         </div>
 
