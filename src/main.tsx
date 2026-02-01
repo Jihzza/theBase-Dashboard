@@ -4,6 +4,10 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./index.css";
 import LoginPage from "@/pages/Login";
 import DashboardPage from "@/pages/Dashboard";
+import InfoPage from "@/pages/Info";
+import CronPage from "@/pages/Cron";
+import InstructionsPage from "@/pages/Instructions";
+import MemoryPage from "@/pages/Memory";
 
 function App() {
   return (
@@ -12,6 +16,10 @@ function App() {
         <Route path="/" element={<Navigate to="/app" replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/app" element={<DashboardPage />} />
+        <Route path="/app/info" element={<InfoPage />} />
+        <Route path="/app/cron" element={<CronPage />} />
+        <Route path="/app/instructions" element={<InstructionsPage />} />
+        <Route path="/app/memory" element={<MemoryPage />} />
         <Route path="*" element={<Navigate to="/app" replace />} />
       </Routes>
     </BrowserRouter>
