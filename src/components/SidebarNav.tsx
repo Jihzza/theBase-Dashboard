@@ -8,8 +8,8 @@ export function SidebarNav() {
     [
       base,
       isActive
-        ? "border-[var(--accent-soft)] bg-surfaceAlt text-ink"
-        : "border-border bg-surface text-muted hover:text-ink hover:border-[var(--accent-soft)]",
+        ? "border-[var(--accent-soft)] bg-surfaceAlt text-ink ring-1 ring-[rgba(153,27,27,0.25)]"
+        : "border-border bg-surface text-muted hover-soft",
     ].join(" ");
 
   return (
