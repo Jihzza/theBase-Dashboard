@@ -13,6 +13,12 @@ export default function LoginPage() {
       if (!supabase) return;
       const { data } = await supabase.auth.getSession();
       if (data.session) window.location.href = "/app";
+
+      const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+        if (event === "SIGNED_IN" && session) window.location.href = "/app";
+      });
+
+      return () => sub.subscription.unsubscribe();
     })();
   }, []);
 
@@ -29,7 +35,7 @@ export default function LoginPage() {
             <div className="mt-8 rounded-2xl border border-border bg-surfaceAlt p-4 text-sm text-muted">
               Supabase is not configured yet.
               <div className="mt-2 text-xs">
-                Set <code>VITE_SUPABASE_URL</code> and <code>VITE_SUPABASE_ANON_KEY</code>.
+                In Netlify, set <code>VITE_SUPABASE_URL</code> and <code>VITE_SUPABASE_ANON_KEY</code>, then redeploy.
               </div>
             </div>
           ) : null}
@@ -47,6 +53,7 @@ export default function LoginPage() {
                   password,
                 });
                 if (error) throw error;
+                // Redirect handled by auth state change; keep as fallback.
                 window.location.href = "/app";
               } catch (err: any) {
                 setError(err?.message ?? "Failed to sign in");

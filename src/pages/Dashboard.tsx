@@ -29,6 +29,11 @@ export default function DashboardPage() {
         return;
       }
 
+      // Redirect immediately if signed out.
+      const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+        if (event === "SIGNED_OUT") window.location.href = "/login";
+      });
+
       const { data } = await supabase.auth.getSession();
       if (!data.session) {
         window.location.href = "/login";
@@ -36,7 +41,6 @@ export default function DashboardPage() {
       }
 
       // MVP: read logs directly via Supabase (RLS should protect this).
-      // Later we can route reads through Netlify functions if needed.
       const sb = requireSupabase();
       const { data: rows, error } = await sb
         .from("logs")
@@ -51,6 +55,8 @@ export default function DashboardPage() {
         setLogs((rows ?? []) as LogEntry[]);
       }
       setLoading(false);
+
+      return () => sub.subscription.unsubscribe();
     })();
   }, []);
 
