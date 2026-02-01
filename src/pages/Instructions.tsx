@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { AppNav } from "@/components/AppNav";
+import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
+import { Panel } from "@/components/Panel";
 import { TopNav } from "@/components/TopNav";
 import { requireSupabase, supabase } from "@/lib/supabase";
 
@@ -52,31 +53,12 @@ export default function InstructionsPage() {
   return (
     <AppShell>
       <TopNav title="Instructions" />
-      <main className="relative z-10 mx-auto max-w-6xl px-6 pt-24 pb-16">
-        <div className="flex items-end justify-between gap-6">
-          <div>
-            <h1 className="text-3xl font-semibold tracking-tight text-ink">Instructions</h1>
-            <p className="mt-3 text-muted max-w-2xl">
-              Per-project instructions that Clawdbot must follow.
-            </p>
-          </div>
-          <div className="hidden md:block">
-            <AppNav />
-          </div>
-        </div>
-
-        <div className="mt-6 md:hidden">
-          <AppNav />
-        </div>
-
-        <div className="mt-10 grid gap-6 md:grid-cols-12">
+      <AppLayout title="Instructions">
+        <div className="grid gap-6 md:grid-cols-12">
           <div className="md:col-span-4">
-            <div className="rounded-2xl border border-border bg-surface p-6 shadow-soft">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
-                Project
-              </div>
+            <Panel title="Project" subtitle="Select which project instructions to edit.">
               {loading ? (
-                <div className="mt-4 text-sm text-muted">Loading…</div>
+                <div className="text-sm text-muted">Loading…</div>
               ) : (
                 <select
                   value={project}
@@ -84,7 +66,7 @@ export default function InstructionsPage() {
                     setProject(e.target.value);
                     setError(null);
                   }}
-                  className="mt-3 w-full rounded-xl border border-border bg-surfaceAlt px-4 py-3 text-sm text-ink focus:outline-none focus:border-[var(--accent)]"
+                  className="mt-1 w-full rounded-xl border border-border bg-surfaceAlt px-4 py-3 text-sm text-ink focus:outline-none focus:border-[var(--accent)]"
                 >
                   {projects.map((p) => (
                     <option key={p} value={p}>
@@ -94,18 +76,17 @@ export default function InstructionsPage() {
                 </select>
               )}
 
-              <div className="mt-6 text-xs text-muted">
+              <div className="mt-4 text-xs text-muted">
                 Last updated: {current ? new Date(current.updated_at).toLocaleString() : "—"}
               </div>
-            </div>
+            </Panel>
           </div>
 
           <div className="md:col-span-8">
-            <div className="rounded-2xl border border-border bg-surface p-6 shadow-soft">
-              <div className="flex items-center justify-between gap-3">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
-                  Instructions
-                </div>
+            <Panel
+              title="Instructions"
+              subtitle="Clawdbot should read and follow these before doing work."
+              actions={
                 <button
                   type="button"
                   disabled={!current || saving}
@@ -138,10 +119,10 @@ export default function InstructionsPage() {
                 >
                   {saving ? "Saving…" : "Save"}
                 </button>
-              </div>
-
+              }
+            >
               {error ? (
-                <div className="mt-4 rounded-xl border border-border bg-surfaceAlt p-4 text-sm text-muted">
+                <div className="rounded-xl border border-border bg-surfaceAlt p-4 text-sm text-muted">
                   {error}
                 </div>
               ) : null}
@@ -150,12 +131,12 @@ export default function InstructionsPage() {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Write instructions for this project…"
-                className="mt-4 min-h-[360px] w-full rounded-xl border border-border bg-surfaceAlt px-4 py-3 text-sm text-ink focus:outline-none focus:border-[var(--accent)]"
+                className="mt-4 min-h-[420px] w-full rounded-xl border border-border bg-surfaceAlt px-4 py-3 text-sm text-ink focus:outline-none focus:border-[var(--accent)]"
               />
-            </div>
+            </Panel>
           </div>
         </div>
-      </main>
+      </AppLayout>
     </AppShell>
   );
 }

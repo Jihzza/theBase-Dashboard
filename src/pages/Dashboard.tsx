@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
-import { Chip } from "@/components/Chip";
-import { FeatureCard } from "@/components/FeatureCard";
+import { Panel } from "@/components/Panel";
 import { SectionHeader } from "@/components/SectionHeader";
 import { TopNav } from "@/components/TopNav";
 import { requireSupabase, supabase } from "@/lib/supabase";
@@ -83,76 +83,45 @@ export default function DashboardPage() {
     <AppShell>
       <TopNav title="Dashboard" />
 
-      <main className="relative z-10 mx-auto max-w-6xl px-6 pt-24 pb-16">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div>
-            <h1 className="text-4xl font-semibold tracking-tight text-ink">The Base</h1>
-            <p className="mt-3 text-muted max-w-2xl">
-              A private command center for tracking what Clawdbot is doing across projects.
-            </p>
+      <AppLayout
+        title="Dashboard"
+        right={
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <Panel title="Quick links" subtitle="Jump to key areas.">
+              <div className="grid gap-2">
+                <Link to="/app/files" className="text-sm font-semibold text-ink underline underline-offset-4">
+                  Files
+                </Link>
+                <Link to="/app/instructions" className="text-sm font-semibold text-ink underline underline-offset-4">
+                  Instructions
+                </Link>
+                <Link to="/app/cron" className="text-sm font-semibold text-ink underline underline-offset-4">
+                  Cron
+                </Link>
+                <Link to="/app/memory" className="text-sm font-semibold text-ink underline underline-offset-4">
+                  Memory
+                </Link>
+                <Link to="/app/info" className="text-sm font-semibold text-ink underline underline-offset-4">
+                  Info
+                </Link>
+              </div>
+            </Panel>
+
+            <Panel title="Agents" subtitle="(Coming soon) Role-based bots per team member." >
+              <p className="text-sm text-muted">Profiles, tool scopes, and permissions.</p>
+            </Panel>
+
+            <Panel title="Tasks" subtitle="(Coming soon) Track work step-by-step." >
+              <p className="text-sm text-muted">Attach logs, files, and outcomes.</p>
+            </Panel>
           </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Chip text="MVP" />
-            <Chip text="Supabase" />
-            <Chip text="Netlify" />
-          </div>
-        </div>
-
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          <div className="bg-surface border border-border rounded-2xl p-6 hover-soft">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
-              Quick links
-            </div>
-            <div className="mt-4 grid gap-2">
-              <Link
-                to="/app/info"
-                className="text-sm font-semibold text-ink underline underline-offset-4"
-              >
-                Info
-              </Link>
-              <Link
-                to="/app/cron"
-                className="text-sm font-semibold text-ink underline underline-offset-4"
-              >
-                Cron jobs
-              </Link>
-              <Link
-                to="/app/instructions"
-                className="text-sm font-semibold text-ink underline underline-offset-4"
-              >
-                Instructions
-              </Link>
-              <Link
-                to="/app/memory"
-                className="text-sm font-semibold text-ink underline underline-offset-4"
-              >
-                Memory
-              </Link>
-              <Link
-                to="/app/files"
-                className="text-sm font-semibold text-ink underline underline-offset-4"
-              >
-                Files
-              </Link>
-            </div>
-            <p className="mt-6 text-sm text-muted">
-              Everything is reachable from here.
-            </p>
-          </div>
-
-          <FeatureCard
-            title="Agents"
-            subtitle="(Coming soon) Separate roles for research, coding, ops, and reporting."
-          />
-          <FeatureCard
-            title="Tasks"
-            subtitle="(Coming soon) Assign, track progress, and attach logs to tasks."
-          />
-        </div>
-
-        <div className="mt-12">
-          <SectionHeader label="Activity Log" />
+        }
+      >
+        <Panel
+          title="Activity log"
+          subtitle="Search and filter the latest work entries."
+        >
+          <SectionHeader label="Filters" />
 
           <div className="grid gap-4 md:grid-cols-12">
             <div className="md:col-span-8">
@@ -235,8 +204,8 @@ export default function DashboardPage() {
               </div>
             )}
           </div>
-        </div>
-      </main>
+        </Panel>
+      </AppLayout>
     </AppShell>
   );
 }

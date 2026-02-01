@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { AppNav } from "@/components/AppNav";
+import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
+import { Panel } from "@/components/Panel";
 import { TopNav } from "@/components/TopNav";
 import { requireSupabase, supabase } from "@/lib/supabase";
 
@@ -172,30 +173,13 @@ export default function FilesPage() {
   return (
     <AppShell>
       <TopNav title="Files" />
-      <main className="relative z-10 mx-auto max-w-6xl px-6 pt-24 pb-16">
-        <div className="flex items-end justify-between gap-6">
-          <div>
-            <h1 className="text-3xl font-semibold tracking-tight text-ink">Files</h1>
-            <p className="mt-3 text-muted max-w-2xl">
-              Notes, ideas, and research documents. (MVP: text stored in Supabase.)
-            </p>
-          </div>
-          <div className="hidden md:block">
-            <AppNav />
-          </div>
-        </div>
-
-        <div className="mt-6 md:hidden">
-          <AppNav />
-        </div>
-
-        <div className="mt-10 grid gap-6 md:grid-cols-12">
+      <AppLayout title="Files">
+        <div className="grid gap-6 md:grid-cols-12">
           <div className="md:col-span-4">
-            <div className="rounded-2xl border border-border bg-surface p-6 shadow-soft">
-              <div className="flex items-center justify-between">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
-                  Library
-                </div>
+            <Panel
+              title="Library"
+              subtitle="Browse, search, and create documents."
+              actions={
                 <button
                   type="button"
                   disabled={saving}
@@ -204,9 +188,9 @@ export default function FilesPage() {
                 >
                   New
                 </button>
-              </div>
-
-              <div className="mt-4 grid gap-3">
+              }
+            >
+              <div className="grid gap-3">
                 <input
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
@@ -274,32 +258,37 @@ export default function FilesPage() {
                   </div>
                 )}
               </div>
-            </div>
+            </Panel>
           </div>
 
           <div className="md:col-span-8">
-            <div className="rounded-2xl border border-border bg-surface p-6 shadow-soft">
+            <Panel
+              title="Editor"
+              subtitle={
+                active
+                  ? `Editing: ${active.title}`
+                  : "Select a file on the left, or create a new one."
+              }
+              actions={
+                active ? (
+                  <button
+                    type="button"
+                    disabled={saving}
+                    className="text-[11px] font-semibold uppercase tracking-[0.2em] px-4 py-2 border border-border rounded-full hover:text-ink hover:border-[var(--accent-soft)] transition-colors disabled:opacity-50"
+                    onClick={save}
+                  >
+                    {saving ? "Saving…" : "Save"}
+                  </button>
+                ) : null
+              }
+            >
               {!active ? (
                 <div className="text-sm text-muted">
                   Select a file on the left, or create a new one.
                 </div>
               ) : (
                 <>
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
-                      Editor
-                    </div>
-                    <button
-                      type="button"
-                      disabled={saving}
-                      className="text-[11px] font-semibold uppercase tracking-[0.2em] px-4 py-2 border border-border rounded-full hover:text-ink hover:border-[var(--accent-soft)] transition-colors disabled:opacity-50"
-                      onClick={save}
-                    >
-                      {saving ? "Saving…" : "Save"}
-                    </button>
-                  </div>
-
-                  <div className="mt-4 grid gap-3 md:grid-cols-12">
+                  <div className="grid gap-3 md:grid-cols-12">
                     <div className="md:col-span-7">
                       <label className="grid gap-2">
                         <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
@@ -373,10 +362,10 @@ export default function FilesPage() {
                   </div>
                 </>
               )}
-            </div>
+            </Panel>
           </div>
         </div>
-      </main>
+      </AppLayout>
     </AppShell>
   );
 }

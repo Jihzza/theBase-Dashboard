@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { AppNav } from "@/components/AppNav";
+import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
+import { Panel } from "@/components/Panel";
 import { TopNav } from "@/components/TopNav";
 import { requireSupabase, supabase } from "@/lib/supabase";
 
@@ -40,24 +41,11 @@ export default function CronPage() {
   return (
     <AppShell>
       <TopNav title="Cron" />
-      <main className="relative z-10 mx-auto max-w-6xl px-6 pt-24 pb-16">
-        <div className="flex items-end justify-between gap-6">
-          <div>
-            <h1 className="text-3xl font-semibold tracking-tight text-ink">Cron</h1>
-            <p className="mt-3 text-muted max-w-2xl">
-              Snapshot of scheduled jobs. This updates when Clawdbot ingests a new snapshot.
-            </p>
-          </div>
-          <div className="hidden md:block">
-            <AppNav />
-          </div>
-        </div>
-
-        <div className="mt-6 md:hidden">
-          <AppNav />
-        </div>
-
-        <div className="mt-10 rounded-2xl border border-border bg-surface p-6 shadow-soft">
+      <AppLayout title="Cron">
+        <Panel
+          title="Cron jobs"
+          subtitle="Latest snapshot. Updates when Clawdbot ingests a new snapshot."
+        >
           {loading ? (
             <div className="text-sm text-muted">Loading…</div>
           ) : row ? (
@@ -72,8 +60,8 @@ export default function CronPage() {
           ) : (
             <div className="text-sm text-muted">No cron snapshot yet.</div>
           )}
-        </div>
-      </main>
+        </Panel>
+      </AppLayout>
     </AppShell>
   );
 }

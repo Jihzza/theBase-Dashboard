@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { AppNav } from "@/components/AppNav";
+import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
+import { Panel } from "@/components/Panel";
 import { TopNav } from "@/components/TopNav";
 import { requireSupabase, supabase } from "@/lib/supabase";
 
@@ -41,22 +42,8 @@ export default function MemoryPage() {
   return (
     <AppShell>
       <TopNav title="Memory" />
-      <main className="relative z-10 mx-auto max-w-6xl px-6 pt-24 pb-16">
-        <div className="flex items-end justify-between gap-6">
-          <div>
-            <h1 className="text-3xl font-semibold tracking-tight text-ink">Memory</h1>
-            <p className="mt-3 text-muted max-w-2xl">Latest memory snapshot ingested from Clawdbot.</p>
-          </div>
-          <div className="hidden md:block">
-            <AppNav />
-          </div>
-        </div>
-
-        <div className="mt-6 md:hidden">
-          <AppNav />
-        </div>
-
-        <div className="mt-10 rounded-2xl border border-border bg-surface p-6 shadow-soft">
+      <AppLayout title="Memory">
+        <Panel title="Memory snapshot" subtitle="Latest memory snapshot ingested from Clawdbot.">
           {loading ? (
             <div className="text-sm text-muted">Loading…</div>
           ) : row ? (
@@ -71,8 +58,8 @@ export default function MemoryPage() {
           ) : (
             <div className="text-sm text-muted">No memory snapshot yet.</div>
           )}
-        </div>
-      </main>
+        </Panel>
+      </AppLayout>
     </AppShell>
   );
 }
