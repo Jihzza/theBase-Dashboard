@@ -29,6 +29,9 @@ export function AppNav() {
       <NavLink to="/app/memory" className={linkClass}>
         Memory
       </NavLink>
+      <NavLink to="/app/files" className={linkClass}>
+        Files
+      </NavLink>
     </div>
   );
 }

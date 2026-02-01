@@ -8,6 +8,7 @@ import InfoPage from "@/pages/Info";
 import CronPage from "@/pages/Cron";
 import InstructionsPage from "@/pages/Instructions";
 import MemoryPage from "@/pages/Memory";
+import FilesPage from "@/pages/Files";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/app/cron" element={<CronPage />} />
         <Route path="/app/instructions" element={<InstructionsPage />} />
         <Route path="/app/memory" element={<MemoryPage />} />
+        <Route path="/app/files" element={<FilesPage />} />
         <Route path="*" element={<Navigate to="/app" replace />} />
       </Routes>
     </BrowserRouter>

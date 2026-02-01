@@ -129,6 +129,12 @@ export default function DashboardPage() {
               >
                 Memory
               </Link>
+              <Link
+                to="/app/files"
+                className="text-sm font-semibold text-ink underline underline-offset-4"
+              >
+                Files
+              </Link>
             </div>
             <p className="mt-6 text-sm text-muted">
               Everything is reachable from here.
