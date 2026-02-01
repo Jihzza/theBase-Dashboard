@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { StatusIndicator } from "@/components/StatusIndicator";
 
 export function TopNav({ title }: { title: string }) {
   const [email, setEmail] = useState<string | null>(null);
@@ -21,7 +22,7 @@ export function TopNav({ title }: { title: string }) {
   return (
     <nav className="fixed w-full z-50 top-0 border-b border-border nav-blur">
       <div className="max-w-6xl mx-auto px-6 md:px-8 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <div className="text-sm font-semibold tracking-[0.2em] uppercase text-ink">
             The Base
           </div>
@@ -29,9 +30,15 @@ export function TopNav({ title }: { title: string }) {
             {title}
             {email ? <span className="ml-3 text-zinc-500">· {email}</span> : null}
           </div>
+          <div className="hidden md:block">
+            <StatusIndicator />
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
+          <div className="md:hidden">
+            <StatusIndicator />
+          </div>
           <button
             type="button"
             disabled={!supabase || busy}
@@ -44,7 +51,6 @@ export function TopNav({ title }: { title: string }) {
                 if (error) throw error;
                 window.location.href = "/login";
               } catch {
-                // If sign out fails for any reason, force navigation anyway.
                 window.location.href = "/login";
               } finally {
                 setBusy(false);
