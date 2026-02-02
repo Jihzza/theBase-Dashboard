@@ -13,10 +13,12 @@ if (!key) {
   process.exit(1);
 }
 
-const [title, details = "", tagsCsv = "", linksCsv = ""] = process.argv.slice(2);
+const [title, details = "", tagsCsv = "", linksCsv = "", startedAt = "", finishedAt = ""] = process.argv.slice(2);
 
 if (!title) {
-  console.error("Usage: node scripts/log-step.mjs \"Title\" \"Details\" \"tag1,tag2\" \"https://link\"");
+  console.error(
+    "Usage: node scripts/log-step.mjs \"Title\" \"Details\" \"tag1,tag2\" \"https://link\" \"started_at ISO\" \"finished_at ISO\"",
+  );
   process.exit(1);
 }
 
@@ -33,6 +35,8 @@ const payload = {
   links,
   status: "done",
   source: "clawdbot",
+  started_at: startedAt || new Date().toISOString(),
+  finished_at: finishedAt || new Date().toISOString(),
 };
 
 const { error } = await supabase.from("logs").insert(payload);

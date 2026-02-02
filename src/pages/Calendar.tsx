@@ -16,7 +16,8 @@ function toLocalDateKey(date: Date) {
   return d.toISOString().slice(0, 10);
 }
 
-function parseLogDate(ts: string) {
+function parseLogDate(ts?: string | null) {
+  if (!ts) return null;
   const d = new Date(ts);
   if (Number.isNaN(d.valueOf())) return null;
   return d;
@@ -132,7 +133,9 @@ export default function CalendarPage() {
 
   const selectedKey = toLocalDateKey(selectedDate);
   const dayLogs = (logsByDay.get(selectedKey) ?? []).slice().sort((a, b) => {
-    return new Date(a.timestamp).valueOf() - new Date(b.timestamp).valueOf();
+    const aStart = parseLogDate(a.started_at) ?? parseLogDate(a.timestamp) ?? new Date(0);
+    const bStart = parseLogDate(b.started_at) ?? parseLogDate(b.timestamp) ?? new Date(0);
+    return aStart.valueOf() - bStart.valueOf();
   });
 
   return (
@@ -280,36 +283,55 @@ export default function CalendarPage() {
                 </div>
               </div>
 
-              <div className="grid gap-3">
-                {dayLogs.map((log) => {
-                  const d = parseLogDate(log.timestamp);
-                  return (
-                    <button
-                      key={log.id}
-                      onClick={() => setActiveLog(log)}
-                      className="rounded-xl border border-border bg-surface p-4 text-left hover-soft"
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="text-sm font-semibold text-ink">{log.title}</div>
-                        <div className="text-xs text-muted">{d ? formatTime(d) : log.timestamp}</div>
-                      </div>
-                      <div className="mt-1 text-xs text-muted">{log.project}</div>
-                      {log.tags && log.tags.length > 0 && (
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {log.tags.map((tag) => (
-                            <Chip key={tag} text={tag} />
-                          ))}
+              <div className="grid gap-4 lg:grid-cols-[80px_1fr]">
+                <div className="grid gap-2 text-[10px] font-semibold text-muted">
+                  {Array.from({ length: 24 }).map((_, i) => (
+                    <div key={i} className="h-12">
+                      {pad(i)}:00
+                    </div>
+                  ))}
+                </div>
+                <div className="relative min-h-[1152px] rounded-xl border border-border bg-surface">
+                  {dayLogs.map((log) => {
+                    const start = parseLogDate(log.started_at) ?? parseLogDate(log.timestamp);
+                    const end = parseLogDate(log.finished_at) ?? parseLogDate(log.timestamp) ?? start;
+                    if (!start) return null;
+                    const startMinutes = start.getHours() * 60 + start.getMinutes();
+                    const endMinutes = end ? end.getHours() * 60 + end.getMinutes() : startMinutes + 30;
+                    const duration = Math.max(endMinutes - startMinutes, 15);
+                    const top = (startMinutes / 60) * 48; // 48px per hour
+                    const height = (duration / 60) * 48;
+
+                    return (
+                      <button
+                        key={log.id}
+                        onClick={() => setActiveLog(log)}
+                        className="absolute left-4 right-4 rounded-lg border border-border bg-surfaceAlt p-3 text-left shadow-sm hover-soft"
+                        style={{ top: `${top}px`, height: `${height}px` }}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="text-sm font-semibold text-ink">{log.title}</div>
+                          <div className="text-[10px] text-muted">
+                            {formatTime(start)} – {end ? formatTime(end) : formatTime(start)}
+                          </div>
                         </div>
-                      )}
-                      {log.details && <p className="mt-3 text-sm text-muted">{log.details}</p>}
-                    </button>
-                  );
-                })}
-                {!dayLogs.length && (
-                  <div className="rounded-xl border border-dashed border-border p-6 text-sm text-muted">
-                    No logs for this day yet.
-                  </div>
-                )}
+                        <div className="mt-1 text-[10px] text-muted">{log.project}</div>
+                        {log.tags && log.tags.length > 0 && (
+                          <div className="mt-2 flex flex-wrap gap-1">
+                            {log.tags.slice(0, 3).map((tag) => (
+                              <Chip key={tag} text={tag} />
+                            ))}
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                  {!dayLogs.length && (
+                    <div className="absolute inset-0 flex items-center justify-center text-sm text-muted">
+                      No logs for this day yet.
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -335,11 +357,19 @@ export default function CalendarPage() {
               {activeLog.details ?? "No additional details provided."}
             </div>
             <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-muted">
-              <span className="font-semibold text-ink">Timestamp:</span>
+              <span className="font-semibold text-ink">Started:</span>
               <span>
-                {parseLogDate(activeLog.timestamp)
-                  ? formatTimestamp(parseLogDate(activeLog.timestamp)!)
-                  : activeLog.timestamp}
+                {parseLogDate(activeLog.started_at)
+                  ? formatTimestamp(parseLogDate(activeLog.started_at)!)
+                  : "—"}
+              </span>
+            </div>
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted">
+              <span className="font-semibold text-ink">Finished:</span>
+              <span>
+                {parseLogDate(activeLog.finished_at)
+                  ? formatTimestamp(parseLogDate(activeLog.finished_at)!)
+                  : "—"}
               </span>
             </div>
             {activeLog.tags && activeLog.tags.length > 0 && (

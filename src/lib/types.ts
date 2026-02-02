@@ -2,6 +2,8 @@ export type LogEntry = {
   id: string;
   created_at: string;
   timestamp: string;
+  started_at?: string | null;
+  finished_at?: string | null;
   project: string;
   title: string;
   details: string | null;
