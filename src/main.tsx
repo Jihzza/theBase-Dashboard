@@ -10,6 +10,7 @@ import InstructionsPage from "@/pages/Instructions";
 import MemoryPage from "@/pages/Memory";
 import FilesPage from "@/pages/Files";
 import CalendarPage from "@/pages/Calendar";
+import LogsPage from "@/pages/Logs";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/app/memory" element={<MemoryPage />} />
         <Route path="/app/files" element={<FilesPage />} />
         <Route path="/app/calendar" element={<CalendarPage />} />
+        <Route path="/app/logs" element={<LogsPage />} />
         <Route path="*" element={<Navigate to="/app" replace />} />
       </Routes>
     </BrowserRouter>

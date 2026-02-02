@@ -9,6 +9,7 @@ const items = [
   { to: "/app/instructions", label: "Instructions", icon: "🧭", shortcut: "I" },
   { to: "/app/cron", label: "Cron", icon: "⏱", shortcut: "C" },
   { to: "/app/calendar", label: "Calendar", icon: "📆", shortcut: "K" },
+  { to: "/app/logs", label: "Logs", icon: "🧾", shortcut: "L" },
   { to: "/app/memory", label: "Memory", icon: "🧠", shortcut: "M" },
   { to: "/app/info", label: "Info", icon: "ℹ", shortcut: "?" },
 ];
