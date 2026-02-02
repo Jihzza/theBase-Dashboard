@@ -4,18 +4,18 @@
 
 :root {
   /* Dashboard palette */
-  --bg: #07080a;
-  --bg-rgb: 7 8 10;
-  --surface: #0c0f14;
-  --surface-muted: #0a0c10;
-  --ink: #f5f7fb;
+  --bg: #0a0b10;
+  --bg-rgb: 10 11 16;
+  --surface: #0f111a;
+  --surface-muted: #0c0e15;
+  --ink: #f4f6ff;
   --muted: #9aa3b2;
-  --border: #1c2230;
+  --border: #1e2233;
 
-  /* Accent (dark red) */
-  --accent: #991b1b;
-  --accent-soft: #4c0b0b;
-  --accent-ink: #ffd7d7;
+  /* Accent (purple) */
+  --accent: #7c3aed;
+  --accent-soft: #2f1b52;
+  --accent-ink: #e9ddff;
 }
 
 html {
@@ -36,14 +36,9 @@ body {
 /* Subtle dashboard background texture (not “hero/marketing”) */
 .bg-app {
   background:
-    radial-gradient(800px 420px at 15% 0%, rgba(153, 27, 27, 0.10), transparent 60%),
-    radial-gradient(640px 380px at 100% 20%, rgba(255, 255, 255, 0.04), transparent 55%),
-    linear-gradient(180deg, #07080a 0%, #07080a 100%);
-}
-
-.nav-blur {
-  background-color: rgb(var(--bg-rgb) / 0.92);
-  backdrop-filter: blur(10px);
+    radial-gradient(820px 420px at 10% -10%, rgba(124, 58, 237, 0.15), transparent 60%),
+    radial-gradient(700px 380px at 100% 10%, rgba(255, 255, 255, 0.05), transparent 55%),
+    linear-gradient(180deg, #0a0b10 0%, #0a0b10 100%);
 }
 
 /* Dashboard hover: no lift, just crisp border + slight bg */
@@ -52,8 +47,8 @@ body {
 }
 
 .hover-soft:hover {
-  border-color: rgba(153, 27, 27, 0.35);
-  background-color: rgba(255, 255, 255, 0.02);
+  border-color: rgba(124, 58, 237, 0.4);
+  background-color: rgba(255, 255, 255, 0.03);
 }
 
 .shadow-soft {
