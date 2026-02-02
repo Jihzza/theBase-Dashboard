@@ -1,47 +1,39 @@
 import { NavLink } from "react-router-dom";
 
 const base =
-  "flex items-center justify-between rounded-xl border px-4 py-3 text-sm font-semibold transition-colors";
+  "flex items-center gap-3 rounded-xl border px-3 py-2 text-sm font-semibold transition-colors";
 
-export function SidebarNav() {
+const items = [
+  { to: "/app", label: "Dashboard", icon: "▣", shortcut: "↵" },
+  { to: "/app/files", label: "Files", icon: "📄", shortcut: "F" },
+  { to: "/app/instructions", label: "Instructions", icon: "🧭", shortcut: "I" },
+  { to: "/app/cron", label: "Cron", icon: "⏱", shortcut: "C" },
+  { to: "/app/calendar", label: "Calendar", icon: "📆", shortcut: "K" },
+  { to: "/app/memory", label: "Memory", icon: "🧠", shortcut: "M" },
+  { to: "/app/info", label: "Info", icon: "ℹ", shortcut: "?" },
+];
+
+export function SidebarNav({ collapsed = false }: { collapsed?: boolean }) {
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     [
       base,
       isActive
-        ? "border-[var(--accent-soft)] bg-surfaceAlt text-ink ring-1 ring-[rgba(153,27,27,0.25)]"
+        ? "border-[var(--accent-soft)] bg-surfaceAlt text-ink ring-1 ring-[rgba(124,58,237,0.35)]"
         : "border-border bg-surface text-muted hover-soft",
+      collapsed ? "justify-center" : "justify-between",
     ].join(" ");
 
   return (
     <div className="grid gap-2">
-      <NavLink to="/app" end className={linkClass}>
-        <span>Dashboard</span>
-        <span className="text-xs text-zinc-500">↵</span>
-      </NavLink>
-      <NavLink to="/app/files" className={linkClass}>
-        <span>Files</span>
-        <span className="text-xs text-zinc-500">F</span>
-      </NavLink>
-      <NavLink to="/app/instructions" className={linkClass}>
-        <span>Instructions</span>
-        <span className="text-xs text-zinc-500">I</span>
-      </NavLink>
-      <NavLink to="/app/cron" className={linkClass}>
-        <span>Cron</span>
-        <span className="text-xs text-zinc-500">C</span>
-      </NavLink>
-      <NavLink to="/app/calendar" className={linkClass}>
-        <span>Calendar</span>
-        <span className="text-xs text-zinc-500">K</span>
-      </NavLink>
-      <NavLink to="/app/memory" className={linkClass}>
-        <span>Memory</span>
-        <span className="text-xs text-zinc-500">M</span>
-      </NavLink>
-      <NavLink to="/app/info" className={linkClass}>
-        <span>Info</span>
-        <span className="text-xs text-zinc-500">?</span>
-      </NavLink>
+      {items.map((item) => (
+        <NavLink key={item.to} to={item.to} end={item.to === "/app"} className={linkClass}>
+          <span className="text-base leading-none">{item.icon}</span>
+          {!collapsed ? (
+            <span className="flex-1 truncate text-sm">{item.label}</span>
+          ) : null}
+          {!collapsed ? <span className="text-xs text-zinc-500">{item.shortcut}</span> : null}
+        </NavLink>
+      ))}
     </div>
   );
 }
