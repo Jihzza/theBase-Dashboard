@@ -14,27 +14,42 @@ type FileRow = {
   type: string;
   tags: string[] | null;
   content: string;
+  author: string;
+  folder_id: string | null;
   source: string | null;
 };
 
-const TYPES = ["note", "idea", "research", "spec"] as const;
+type FolderRow = {
+  id: string;
+  name: string;
+  project: string;
+  parent_id: string | null;
+};
 
 export default function FilesPage() {
   const [rows, setRows] = useState<FileRow[]>([]);
+  const [folders, setFolders] = useState<FolderRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [q, setQ] = useState("");
   const [project, setProject] = useState<string>("all");
-  const [type, setType] = useState<string>("all");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [folderFilter, setFolderFilter] = useState<string>("all");
 
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const active = rows.find((r) => r.id === activeId) ?? null;
-  const [draft, setDraft] = useState<{ title: string; project: string; type: string; tags: string; content: string }>(
-    { title: "", project: "The Base", type: "note", tags: "", content: "" },
-  );
+  const [draft, setDraft] = useState<{
+    title: string;
+    project: string;
+    type: string;
+    tags: string;
+    content: string;
+    author: string;
+    folder_id: string | null;
+  }>({ title: "", project: "theBase", type: "", tags: "", content: "", author: "", folder_id: null });
 
   useEffect(() => {
     if (!active) return;
@@ -44,6 +59,8 @@ export default function FilesPage() {
       type: active.type,
       tags: (active.tags ?? []).join(", "),
       content: active.content ?? "",
+      author: active.author ?? "",
+      folder_id: active.folder_id ?? null,
     });
   }, [activeId]);
 
@@ -55,17 +72,18 @@ export default function FilesPage() {
       }
 
       const sb = requireSupabase();
-      const { data, error } = await sb
-        .from("files")
-        .select("*")
-        .order("updated_at", { ascending: false })
-        .limit(200);
+      const [{ data: files, error: filesError }, { data: folderData, error: foldersError }] = await Promise.all([
+        sb.from("files").select("*").order("updated_at", { ascending: false }).limit(200),
+        sb.from("folders").select("*").order("name", { ascending: true }).limit(200),
+      ]);
 
-      if (error) {
-        setError(error.message);
+      if (filesError || foldersError) {
+        setError(filesError?.message ?? foldersError?.message ?? "Failed to load");
         setRows([]);
+        setFolders([]);
       } else {
-        setRows((data as FileRow[]) ?? []);
+        setRows((files as FileRow[]) ?? []);
+        setFolders((folderData as FolderRow[]) ?? []);
       }
       setLoading(false);
     })();
@@ -80,14 +98,15 @@ export default function FilesPage() {
     const query = q.trim().toLowerCase();
     return rows.filter((r) => {
       if (project !== "all" && r.project !== project) return false;
-      if (type !== "all" && r.type !== type) return false;
+      if (typeFilter !== "all" && r.type !== typeFilter) return false;
+      if (folderFilter !== "all" && r.folder_id !== folderFilter) return false;
       if (!query) return true;
-      const hay = [r.title, r.project, r.type, r.content, ...(r.tags ?? [])]
+      const hay = [r.title, r.project, r.type, r.content, r.author, ...(r.tags ?? [])]
         .join(" ")
         .toLowerCase();
       return hay.includes(query);
     });
-  }, [rows, q, project, type]);
+  }, [rows, q, project, typeFilter, folderFilter]);
 
   async function createNew() {
     setError(null);
@@ -99,10 +118,12 @@ export default function FilesPage() {
         .from("files")
         .insert({
           title: "Untitled",
-          project: "The Base",
-          type: "note",
+          project: "theBase",
+          type: "",
           tags: ["inbox"],
           content: "",
+          author: "",
+          folder_id: null,
           source: "manual",
           created_at: now,
           updated_at: now,
@@ -142,6 +163,8 @@ export default function FilesPage() {
           type: draft.type,
           tags: tagsArr.length ? tagsArr : null,
           content: draft.content,
+          author: draft.author,
+          folder_id: draft.folder_id,
           updated_at: now,
         })
         .eq("id", active.id);
@@ -158,6 +181,8 @@ export default function FilesPage() {
                 type: draft.type,
                 tags: tagsArr.length ? tagsArr : null,
                 content: draft.content,
+                author: draft.author,
+                folder_id: draft.folder_id,
                 updated_at: now,
               }
             : r,
@@ -170,6 +195,49 @@ export default function FilesPage() {
     }
   }
 
+  async function createFolder() {
+    const name = window.prompt("Folder name?");
+    if (!name) return;
+    setSaving(true);
+    setError(null);
+    try {
+      const sb = requireSupabase();
+      const { data, error } = await sb
+        .from("folders")
+        .insert({ name, project: project === "all" ? "theBase" : project })
+        .select("*")
+        .single();
+      if (error) throw error;
+      setFolders((prev) => [...prev, data as FolderRow]);
+    } catch (e: any) {
+      setError(e?.message ?? "Failed to create folder");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function removeActive() {
+    if (!active) return;
+    if (!window.confirm("Delete this file?")) return;
+    setSaving(true);
+    setError(null);
+    try {
+      const sb = requireSupabase();
+      const { error } = await sb.from("files").delete().eq("id", active.id);
+      if (error) throw error;
+      setRows((prev) => prev.filter((r) => r.id !== active.id));
+      setActiveId(null);
+    } catch (e: any) {
+      setError(e?.message ?? "Delete failed");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  function insertFormat(prefix: string, suffix = "") {
+    setDraft((d) => ({ ...d, content: `${d.content}${prefix}${suffix}` }));
+  }
+
   return (
     <AppShell>
       <TopNav title="Files" />
@@ -180,14 +248,24 @@ export default function FilesPage() {
               title="Library"
               subtitle="Browse, search, and create documents."
               actions={
-                <button
-                  type="button"
-                  disabled={saving}
-                  className="text-[11px] font-semibold uppercase tracking-[0.2em] px-4 py-2 border border-border rounded-full hover:text-ink hover:border-[var(--accent-soft)] transition-colors disabled:opacity-50"
-                  onClick={createNew}
-                >
-                  New
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    disabled={saving}
+                    className="text-[11px] font-semibold uppercase tracking-[0.2em] px-4 py-2 border border-border rounded-full hover:text-ink hover:border-[var(--accent-soft)] transition-colors disabled:opacity-50"
+                    onClick={createNew}
+                  >
+                    New
+                  </button>
+                  <button
+                    type="button"
+                    disabled={saving}
+                    className="text-[11px] font-semibold uppercase tracking-[0.2em] px-4 py-2 border border-border rounded-full hover:text-ink hover:border-[var(--accent-soft)] transition-colors disabled:opacity-50"
+                    onClick={createFolder}
+                  >
+                    Folder
+                  </button>
+                </div>
               }
             >
               <div className="grid gap-3">
@@ -211,17 +289,24 @@ export default function FilesPage() {
                 </select>
 
                 <select
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
+                  value={folderFilter}
+                  onChange={(e) => setFolderFilter(e.target.value)}
                   className="w-full rounded-xl border border-border bg-surfaceAlt px-4 py-3 text-sm text-ink focus:outline-none focus:border-[var(--accent)]"
                 >
-                  <option value="all">all types</option>
-                  {TYPES.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
+                  <option value="all">all folders</option>
+                  {folders.map((f) => (
+                    <option key={f.id} value={f.id}>
+                      {f.name}
                     </option>
                   ))}
                 </select>
+
+                <input
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value)}
+                  placeholder="Filter by type (free-text)"
+                  className="w-full rounded-xl border border-border bg-surfaceAlt px-4 py-3 text-sm text-ink focus:outline-none focus:border-[var(--accent)]"
+                />
               </div>
 
               {error ? (
@@ -251,7 +336,7 @@ export default function FilesPage() {
                       >
                         <div className="text-sm font-semibold text-ink truncate">{r.title}</div>
                         <div className="mt-1 text-xs text-muted truncate">
-                          {r.project} · {r.type} · {new Date(r.updated_at).toLocaleString()}
+                          {r.project} · {r.type || "untitled"} · {new Date(r.updated_at).toLocaleString()}
                         </div>
                       </button>
                     ))}
@@ -317,16 +402,41 @@ export default function FilesPage() {
                     <div className="md:col-span-4">
                       <label className="grid gap-2">
                         <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
-                          Type
+                          Type (free text)
                         </span>
-                        <select
+                        <input
                           value={draft.type}
                           onChange={(e) => setDraft((d) => ({ ...d, type: e.target.value }))}
                           className="w-full rounded-xl border border-border bg-surfaceAlt px-4 py-3 text-sm text-ink focus:outline-none focus:border-[var(--accent)]"
+                        />
+                      </label>
+                    </div>
+                    <div className="md:col-span-4">
+                      <label className="grid gap-2">
+                        <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
+                          Author
+                        </span>
+                        <input
+                          value={draft.author}
+                          onChange={(e) => setDraft((d) => ({ ...d, author: e.target.value }))}
+                          className="w-full rounded-xl border border-border bg-surfaceAlt px-4 py-3 text-sm text-ink focus:outline-none focus:border-[var(--accent)]"
+                        />
+                      </label>
+                    </div>
+                    <div className="md:col-span-4">
+                      <label className="grid gap-2">
+                        <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
+                          Folder
+                        </span>
+                        <select
+                          value={draft.folder_id ?? ""}
+                          onChange={(e) => setDraft((d) => ({ ...d, folder_id: e.target.value || null }))}
+                          className="w-full rounded-xl border border-border bg-surfaceAlt px-4 py-3 text-sm text-ink focus:outline-none focus:border-[var(--accent)]"
                         >
-                          {TYPES.map((t) => (
-                            <option key={t} value={t}>
-                              {t}
+                          <option value="">No folder</option>
+                          {folders.map((f) => (
+                            <option key={f.id} value={f.id}>
+                              {f.name}
                             </option>
                           ))}
                         </select>
@@ -346,9 +456,40 @@ export default function FilesPage() {
                     </div>
                   </div>
 
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => insertFormat("# ")}
+                      className="rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-semibold text-muted hover-soft"
+                    >
+                      H1
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => insertFormat("## ")}
+                      className="rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-semibold text-muted hover-soft"
+                    >
+                      H2
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => insertFormat("- ")}
+                      className="rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-semibold text-muted hover-soft"
+                    >
+                      Bullet
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => insertFormat("1. ")}
+                      className="rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-semibold text-muted hover-soft"
+                    >
+                      Number
+                    </button>
+                  </div>
+
                   <label className="mt-4 grid gap-2">
                     <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
-                      Content
+                      Content (Markdown)
                     </span>
                     <textarea
                       value={draft.content}
@@ -357,8 +498,18 @@ export default function FilesPage() {
                     />
                   </label>
 
-                  <div className="mt-4 text-xs text-muted">
-                    Updated: {new Date(active.updated_at).toLocaleString()} · Source: {active.source ?? "—"}
+                  <div className="mt-4 flex items-center justify-between text-xs text-muted">
+                    <div>
+                      Updated: {new Date(active.updated_at).toLocaleString()} · Source: {active.source ?? "—"}
+                    </div>
+                    <button
+                      type="button"
+                      disabled={saving}
+                      className="rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-semibold text-muted hover-soft"
+                      onClick={removeActive}
+                    >
+                      Delete
+                    </button>
                   </div>
                 </>
               )}
