@@ -9,6 +9,7 @@ import CronPage from "@/pages/Cron";
 import InstructionsPage from "@/pages/Instructions";
 import MemoryPage from "@/pages/Memory";
 import FilesPage from "@/pages/Files";
+import CalendarPage from "@/pages/Calendar";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/app/instructions" element={<InstructionsPage />} />
         <Route path="/app/memory" element={<MemoryPage />} />
         <Route path="/app/files" element={<FilesPage />} />
+        <Route path="/app/calendar" element={<CalendarPage />} />
         <Route path="*" element={<Navigate to="/app" replace />} />
       </Routes>
     </BrowserRouter>

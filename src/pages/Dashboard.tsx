@@ -98,6 +98,9 @@ export default function DashboardPage() {
                 <Link to="/app/cron" className="text-sm font-semibold text-ink underline underline-offset-4">
                   Cron
                 </Link>
+                <Link to="/app/calendar" className="text-sm font-semibold text-ink underline underline-offset-4">
+                  Calendar
+                </Link>
                 <Link to="/app/memory" className="text-sm font-semibold text-ink underline underline-offset-4">
                   Memory
                 </Link>

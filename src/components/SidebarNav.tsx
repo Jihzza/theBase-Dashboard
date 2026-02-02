@@ -30,6 +30,10 @@ export function SidebarNav() {
         <span>Cron</span>
         <span className="text-xs text-zinc-500">C</span>
       </NavLink>
+      <NavLink to="/app/calendar" className={linkClass}>
+        <span>Calendar</span>
+        <span className="text-xs text-zinc-500">K</span>
+      </NavLink>
       <NavLink to="/app/memory" className={linkClass}>
         <span>Memory</span>
         <span className="text-xs text-zinc-500">M</span>
