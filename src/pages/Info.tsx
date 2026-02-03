@@ -2,12 +2,10 @@ import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
 import { FeatureCard } from "@/components/FeatureCard";
 import { Panel } from "@/components/Panel";
-import { TopNav } from "@/components/TopNav";
 
 export default function InfoPage() {
   return (
     <AppShell>
-      <TopNav title="Info" />
       <AppLayout title="Info">
         <Panel
           title="About Clawdbot"

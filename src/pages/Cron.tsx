@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
 import { Panel } from "@/components/Panel";
-import { TopNav } from "@/components/TopNav";
 import { requireSupabase, supabase } from "@/lib/supabase";
 
 type CronRow = {
@@ -40,7 +39,6 @@ export default function CronPage() {
 
   return (
     <AppShell>
-      <TopNav title="Cron" />
       <AppLayout title="Cron">
         <Panel
           title="Cron jobs"

@@ -4,7 +4,6 @@ import { AppShell } from "@/components/AppShell";
 import { Chip } from "@/components/Chip";
 import { Panel } from "@/components/Panel";
 import { SectionHeader } from "@/components/SectionHeader";
-import { TopNav } from "@/components/TopNav";
 
 const seed = [
   {
@@ -42,7 +41,6 @@ export default function TodosPage() {
 
   return (
     <AppShell>
-      <TopNav title="Todos" />
       <AppLayout title="Todos">
         <SectionHeader
           title="Todos"

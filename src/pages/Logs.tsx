@@ -4,7 +4,6 @@ import { AppShell } from "@/components/AppShell";
 import { Chip } from "@/components/Chip";
 import { Panel } from "@/components/Panel";
 import { SectionHeader } from "@/components/SectionHeader";
-import { TopNav } from "@/components/TopNav";
 import { requireSupabase, supabase } from "@/lib/supabase";
 import type { LogEntry } from "@/lib/types";
 
@@ -53,7 +52,7 @@ export default function LogsPage() {
           .from("logs")
           .select("*", { count: "exact" })
           .order("finished_at", { ascending: false })
-          .order("timestamp", { ascending: false })
+          .order("created_at", { ascending: false })
           .range((page - 1) * pageSize, page * pageSize - 1);
 
         if (project !== "all") queryBuilder = queryBuilder.eq("project", project);
@@ -124,7 +123,6 @@ export default function LogsPage() {
 
   return (
     <AppShell>
-      <TopNav title="Logs" />
 
       <AppLayout
         title="Logs"

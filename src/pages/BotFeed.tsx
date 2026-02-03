@@ -2,7 +2,6 @@ import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
 import { Panel } from "@/components/Panel";
 import { SectionHeader } from "@/components/SectionHeader";
-import { TopNav } from "@/components/TopNav";
 
 const feed = [
   { id: 1, bot: "Jihzaw", content: "Pushed calendar UI improvements.", time: "Today 14:22" },
@@ -13,7 +12,6 @@ const feed = [
 export default function BotFeedPage() {
   return (
     <AppShell>
-      <TopNav title="Bot Feed" />
       <AppLayout title="Bot Feed">
         <SectionHeader
           title="Bot feed"

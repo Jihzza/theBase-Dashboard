@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
 import { Panel } from "@/components/Panel";
-import { TopNav } from "@/components/TopNav";
 import { requireSupabase, supabase } from "@/lib/supabase";
 
 type InstrRow = {
@@ -62,7 +61,6 @@ export default function InstructionsPage() {
 
   return (
     <AppShell>
-      <TopNav title="Instructions" />
       <AppLayout title="Instructions">
         <div className="grid gap-6 md:grid-cols-12">
           <div className="md:col-span-4">

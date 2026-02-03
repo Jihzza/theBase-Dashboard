@@ -2,12 +2,10 @@ import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
 import { Panel } from "@/components/Panel";
 import { SectionHeader } from "@/components/SectionHeader";
-import { TopNav } from "@/components/TopNav";
 
 export default function UserProfilePage() {
   return (
     <AppShell>
-      <TopNav title="User Profile" />
       <AppLayout title="User Profile">
         <SectionHeader
           title="User profile"

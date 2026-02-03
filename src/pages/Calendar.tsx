@@ -4,7 +4,6 @@ import { AppShell } from "@/components/AppShell";
 import { Chip } from "@/components/Chip";
 import { Panel } from "@/components/Panel";
 import { SectionHeader } from "@/components/SectionHeader";
-import { TopNav } from "@/components/TopNav";
 import { requireSupabase, supabase } from "@/lib/supabase";
 import type { LogEntry } from "@/lib/types";
 
@@ -99,7 +98,8 @@ export default function CalendarPage() {
       const { data: rows, error } = await sb
         .from("logs")
         .select("*")
-        .order("timestamp", { ascending: false })
+        .order("finished_at", { ascending: false })
+        .order("created_at", { ascending: false })
         .limit(500);
 
       if (error) {
@@ -140,7 +140,6 @@ export default function CalendarPage() {
 
   return (
     <AppShell>
-      <TopNav title="Calendar" />
 
       <AppLayout
         title="Calendar"

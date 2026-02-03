@@ -5,7 +5,8 @@ Run these in Supabase SQL editor (order):
 1. `logs.sql`
 2. `profiles.sql`
 3. `documents.sql`
-4. `files.sql` (requires `logs` table for file_links FK)
+4. `alter_documents.sql` (if documents table already exists)
+5. `files.sql` (requires `logs` table for file_links FK)
 5. `project_instructions.sql`
 6. `todos.sql`
 7. `bots.sql`

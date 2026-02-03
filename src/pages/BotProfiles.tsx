@@ -2,7 +2,6 @@ import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
 import { Panel } from "@/components/Panel";
 import { SectionHeader } from "@/components/SectionHeader";
-import { TopNav } from "@/components/TopNav";
 
 const profiles = [
   { name: "Jihzaw", role: "Core assistant", active: true },
@@ -13,7 +12,6 @@ const profiles = [
 export default function BotProfilesPage() {
   return (
     <AppShell>
-      <TopNav title="Bot Profiles" />
       <AppLayout title="Bot Profiles">
         <SectionHeader
           title="Bot profiles"
