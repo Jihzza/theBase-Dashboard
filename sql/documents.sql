@@ -6,6 +6,8 @@ create table public.documents (
   title text not null,
   tags text[] null,
   author text null,
+  assigned text[] null,
+  visibility text not null default 'private',
   content text not null default '',
   source text null default 'manual',
   constraint documents_pkey primary key (id)

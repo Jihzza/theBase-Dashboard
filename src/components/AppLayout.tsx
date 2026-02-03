@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { SidebarNav } from "@/components/SidebarNav";
+import { StatusIndicator } from "@/components/StatusIndicator";
+import { supabase } from "@/lib/supabase";
 
 export function AppLayout({
   title,
@@ -58,15 +60,39 @@ export function AppLayout({
 
           <SidebarNav collapsed={collapsed} />
 
-          <div className="mt-auto rounded-2xl border border-border bg-surfaceAlt p-3 text-[11px] text-muted">
-            {!collapsed ? (
-              <div>
-                <div className="font-semibold text-ink">Workspace</div>
-                <div>Central dashboard</div>
-              </div>
-            ) : (
-              <div className="text-center">•</div>
-            )}
+          <div className="mt-auto grid gap-3">
+            <div className="rounded-2xl border border-border bg-surfaceAlt p-3 text-[11px] text-muted">
+              {!collapsed ? (
+                <div>
+                  <div className="font-semibold text-ink">Clawdbot</div>
+                  <div className="mt-2">
+                    <StatusIndicator />
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <StatusIndicator />
+                </div>
+              )}
+            </div>
+
+            <button
+              type="button"
+              className={
+                "rounded-2xl border border-border bg-surface px-3 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted hover-soft" +
+                (collapsed ? " text-center" : "")
+              }
+              onClick={async () => {
+                if (!supabase) return;
+                try {
+                  await supabase.auth.signOut();
+                } finally {
+                  window.location.href = "/login";
+                }
+              }}
+            >
+              {collapsed ? "⎋" : "Sign out"}
+            </button>
           </div>
         </div>
       </aside>
@@ -77,7 +103,7 @@ export function AppLayout({
           (collapsed ? "pl-20" : "pl-64")
         }
       >
-        <div className="mx-auto max-w-6xl px-6 pb-16 pt-20">
+        <div className="mx-auto max-w-6xl px-6 pb-16 pt-10">
           {right ? <div className="mb-6">{right}</div> : null}
           {children}
         </div>

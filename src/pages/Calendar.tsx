@@ -4,7 +4,6 @@ import { AppShell } from "@/components/AppShell";
 import { Chip } from "@/components/Chip";
 import { Panel } from "@/components/Panel";
 import { SectionHeader } from "@/components/SectionHeader";
-import { TopNav } from "@/components/TopNav";
 import { requireSupabase, supabase } from "@/lib/supabase";
 import type { LogEntry } from "@/lib/types";
 
@@ -140,7 +139,6 @@ export default function CalendarPage() {
 
   return (
     <AppShell>
-      <TopNav title="Calendar" />
 
       <AppLayout
         title="Calendar"

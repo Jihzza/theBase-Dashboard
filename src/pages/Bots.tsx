@@ -2,7 +2,6 @@ import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
 import { Panel } from "@/components/Panel";
 import { SectionHeader } from "@/components/SectionHeader";
-import { TopNav } from "@/components/TopNav";
 
 const bots = [
   { name: "Jihzaw", owner: "Rafael", status: "online" },
@@ -13,7 +12,6 @@ const bots = [
 export default function BotsPage() {
   return (
     <AppShell>
-      <TopNav title="Bots" />
       <AppLayout title="Bots">
         <SectionHeader
           title="Bot connections"

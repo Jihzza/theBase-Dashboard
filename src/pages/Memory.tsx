@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
 import { Panel } from "@/components/Panel";
-import { TopNav } from "@/components/TopNav";
 import { requireSupabase, supabase } from "@/lib/supabase";
 
 type MemoryRow = {
@@ -41,7 +40,6 @@ export default function MemoryPage() {
 
   return (
     <AppShell>
-      <TopNav title="Memory" />
       <AppLayout title="Memory">
         <Panel title="Memory snapshot" subtitle="Latest memory snapshot ingested from Clawdbot.">
           {loading ? (

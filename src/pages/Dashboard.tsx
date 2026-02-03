@@ -4,7 +4,6 @@ import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
 import { Panel } from "@/components/Panel";
 import { SectionHeader } from "@/components/SectionHeader";
-import { TopNav } from "@/components/TopNav";
 import { requireSupabase, supabase } from "@/lib/supabase";
 import type { LogEntry } from "@/lib/types";
 
@@ -81,7 +80,6 @@ export default function DashboardPage() {
 
   return (
     <AppShell>
-      <TopNav title="Dashboard" />
 
       <AppLayout
         title="Dashboard"
