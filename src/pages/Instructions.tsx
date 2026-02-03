@@ -8,6 +8,7 @@ import { requireSupabase, supabase } from "@/lib/supabase";
 type InstrRow = {
   id: string;
   project: string;
+  category: string;
   content: string;
   updated_at: string;
 };
@@ -18,14 +19,23 @@ export default function InstructionsPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const projects = useMemo(() => rows.map((r) => r.project).sort(), [rows]);
-  const [project, setProject] = useState<string>("The Base");
-  const current = rows.find((r) => r.project === project);
+  const projects = useMemo(() => Array.from(new Set(rows.map((r) => r.project))).sort(), [rows]);
+  const categories = useMemo(
+    () => Array.from(new Set(rows.filter((r) => r.project === project).map((r) => r.category))).sort(),
+    [rows, project],
+  );
+  const [project, setProject] = useState<string>("theBase");
+  const [category, setCategory] = useState<string>("");
+  const current = rows.find((r) => r.project === project && r.category === category);
   const [content, setContent] = useState<string>("");
 
   useEffect(() => {
     if (current) setContent(current.content ?? "");
   }, [current?.id]);
+
+  useEffect(() => {
+    if (!category && categories.length) setCategory(categories[0]);
+  }, [categories, category]);
 
   useEffect(() => {
     (async () => {
@@ -37,7 +47,7 @@ export default function InstructionsPage() {
       const sb = requireSupabase();
       const { data, error } = await sb
         .from("project_instructions")
-        .select("id,project,content,updated_at")
+        .select("id,project,category,content,updated_at")
         .order("project", { ascending: true });
 
       if (error) {
@@ -60,20 +70,59 @@ export default function InstructionsPage() {
               {loading ? (
                 <div className="text-sm text-muted">Loading…</div>
               ) : (
-                <select
-                  value={project}
-                  onChange={(e) => {
-                    setProject(e.target.value);
-                    setError(null);
-                  }}
-                  className="mt-1 w-full rounded-xl border border-border bg-surfaceAlt px-4 py-3 text-sm text-ink focus:outline-none focus:border-[var(--accent)]"
-                >
-                  {projects.map((p) => (
-                    <option key={p} value={p}>
-                      {p}
-                    </option>
-                  ))}
-                </select>
+                <div className="grid gap-3">
+                  <select
+                    value={project}
+                    onChange={(e) => {
+                      setProject(e.target.value);
+                      setError(null);
+                      setCategory("");
+                    }}
+                    className="w-full rounded-xl border border-border bg-surfaceAlt px-4 py-3 text-sm text-ink focus:outline-none focus:border-[var(--accent)]"
+                  >
+                    {projects.map((p) => (
+                      <option key={p} value={p}>
+                        {p}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="w-full rounded-xl border border-border bg-surfaceAlt px-4 py-3 text-sm text-ink focus:outline-none focus:border-[var(--accent)]"
+                  >
+                    {categories.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
+                  </select>
+
+                  <button
+                    type="button"
+                    className="rounded-full border border-border bg-surface px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted hover-soft"
+                    onClick={async () => {
+                      const name = window.prompt("New instruction category?");
+                      if (!name) return;
+                      try {
+                        const sb = requireSupabase();
+                        const { data, error } = await sb
+                          .from("project_instructions")
+                          .insert({ project, category: name, content: "" })
+                          .select("*")
+                          .single();
+                        if (error) throw error;
+                        setRows((prev) => [...prev, data as InstrRow]);
+                        setCategory(name);
+                      } catch (e: any) {
+                        setError(e?.message ?? "Failed to create category");
+                      }
+                    }}
+                  >
+                    New category
+                  </button>
+                </div>
               )}
 
               <div className="mt-4 text-xs text-muted">
@@ -97,17 +146,16 @@ export default function InstructionsPage() {
                     setError(null);
                     try {
                       const sb = requireSupabase();
+                      const now = new Date().toISOString();
                       const { error } = await sb
                         .from("project_instructions")
-                        .update({ content, updated_at: new Date().toISOString() })
+                        .update({ content, updated_at: now })
                         .eq("id", current.id);
                       if (error) throw error;
 
                       setRows((prev) =>
                         prev.map((r) =>
-                          r.id === current.id
-                            ? { ...r, content, updated_at: new Date().toISOString() }
-                            : r,
+                          r.id === current.id ? { ...r, content, updated_at: now } : r,
                         ),
                       );
                     } catch (e: any) {

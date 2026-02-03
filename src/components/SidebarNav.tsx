@@ -5,12 +5,18 @@ const base =
 
 const items = [
   { to: "/app", label: "Dashboard", icon: "▣", shortcut: "↵" },
+  { to: "/app/docs", label: "Docs", icon: "📝", shortcut: "D" },
   { to: "/app/files", label: "Files", icon: "📄", shortcut: "F" },
+  { to: "/app/logs", label: "Logs", icon: "🧾", shortcut: "L" },
+  { to: "/app/calendar", label: "Calendar", icon: "📆", shortcut: "K" },
+  { to: "/app/todos", label: "Todos", icon: "✅", shortcut: "T" },
   { to: "/app/instructions", label: "Instructions", icon: "🧭", shortcut: "I" },
   { to: "/app/cron", label: "Cron", icon: "⏱", shortcut: "C" },
-  { to: "/app/calendar", label: "Calendar", icon: "📆", shortcut: "K" },
-  { to: "/app/logs", label: "Logs", icon: "🧾", shortcut: "L" },
   { to: "/app/memory", label: "Memory", icon: "🧠", shortcut: "M" },
+  { to: "/app/bots", label: "Bots", icon: "🤖", shortcut: "B" },
+  { to: "/app/bot-profiles", label: "Bot Profiles", icon: "👤", shortcut: "P" },
+  { to: "/app/bot-feed", label: "Bot Feed", icon: "💬", shortcut: "BF" },
+  { to: "/app/profile", label: "User Profile", icon: "👥", shortcut: "U" },
   { to: "/app/info", label: "Info", icon: "ℹ", shortcut: "?" },
 ];
 

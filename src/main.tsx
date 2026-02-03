@@ -11,6 +11,12 @@ import MemoryPage from "@/pages/Memory";
 import FilesPage from "@/pages/Files";
 import CalendarPage from "@/pages/Calendar";
 import LogsPage from "@/pages/Logs";
+import DocsPage from "@/pages/Docs";
+import TodosPage from "@/pages/Todos";
+import BotsPage from "@/pages/Bots";
+import BotProfilesPage from "@/pages/BotProfiles";
+import BotFeedPage from "@/pages/BotFeed";
+import UserProfilePage from "@/pages/UserProfile";
 
 function App() {
   return (
@@ -24,8 +30,14 @@ function App() {
         <Route path="/app/instructions" element={<InstructionsPage />} />
         <Route path="/app/memory" element={<MemoryPage />} />
         <Route path="/app/files" element={<FilesPage />} />
+        <Route path="/app/docs" element={<DocsPage />} />
         <Route path="/app/calendar" element={<CalendarPage />} />
         <Route path="/app/logs" element={<LogsPage />} />
+        <Route path="/app/todos" element={<TodosPage />} />
+        <Route path="/app/bots" element={<BotsPage />} />
+        <Route path="/app/bot-profiles" element={<BotProfilesPage />} />
+        <Route path="/app/bot-feed" element={<BotFeedPage />} />
+        <Route path="/app/profile" element={<UserProfilePage />} />
         <Route path="*" element={<Navigate to="/app" replace />} />
       </Routes>
     </BrowserRouter>

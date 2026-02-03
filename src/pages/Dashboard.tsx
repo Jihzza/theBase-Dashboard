@@ -89,20 +89,20 @@ export default function DashboardPage() {
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <Panel title="Quick links" subtitle="Jump to key areas.">
               <div className="grid gap-2">
+                <Link to="/app/docs" className="text-sm font-semibold text-ink underline underline-offset-4">
+                  Docs
+                </Link>
                 <Link to="/app/files" className="text-sm font-semibold text-ink underline underline-offset-4">
                   Files
                 </Link>
-                <Link to="/app/instructions" className="text-sm font-semibold text-ink underline underline-offset-4">
-                  Instructions
-                </Link>
-                <Link to="/app/cron" className="text-sm font-semibold text-ink underline underline-offset-4">
-                  Cron
+                <Link to="/app/logs" className="text-sm font-semibold text-ink underline underline-offset-4">
+                  Logs
                 </Link>
                 <Link to="/app/calendar" className="text-sm font-semibold text-ink underline underline-offset-4">
                   Calendar
                 </Link>
-                <Link to="/app/memory" className="text-sm font-semibold text-ink underline underline-offset-4">
-                  Memory
+                <Link to="/app/todos" className="text-sm font-semibold text-ink underline underline-offset-4">
+                  Todos
                 </Link>
                 <Link to="/app/info" className="text-sm font-semibold text-ink underline underline-offset-4">
                   Info
