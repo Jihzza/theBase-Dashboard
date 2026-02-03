@@ -5,6 +5,10 @@ const base =
 
 const items = [
   { to: "/app", label: "Dashboard", icon: "▣", shortcut: "↵" },
+  { to: "/app/planning", label: "Planning", icon: "🗂", shortcut: "P" },
+  { to: "/app/health", label: "Health", icon: "📈", shortcut: "H" },
+  { to: "/app/social", label: "Social", icon: "🗨", shortcut: "S" },
+  { to: "/app/messages", label: "Messages", icon: "💬", shortcut: "M" },
   { to: "/app/docs", label: "Docs", icon: "📝", shortcut: "D" },
   { to: "/app/files", label: "Files", icon: "📄", shortcut: "F" },
   { to: "/app/logs", label: "Logs", icon: "🧾", shortcut: "L" },
@@ -12,10 +16,10 @@ const items = [
   { to: "/app/todos", label: "Todos", icon: "✅", shortcut: "T" },
   { to: "/app/instructions", label: "Instructions", icon: "🧭", shortcut: "I" },
   { to: "/app/cron", label: "Cron", icon: "⏱", shortcut: "C" },
-  { to: "/app/memory", label: "Memory", icon: "🧠", shortcut: "M" },
+  { to: "/app/memory", label: "Memory", icon: "🧠", shortcut: "ME" },
   { to: "/app/bots", label: "Bots", icon: "🤖", shortcut: "B" },
-  { to: "/app/bot-profiles", label: "Bot Profiles", icon: "👤", shortcut: "P" },
-  { to: "/app/bot-feed", label: "Bot Feed", icon: "💬", shortcut: "BF" },
+  { to: "/app/bot-profiles", label: "Bot Profiles", icon: "👤", shortcut: "BP" },
+  { to: "/app/bot-feed", label: "Bot Feed", icon: "📰", shortcut: "BF" },
   { to: "/app/profile", label: "User Profile", icon: "👥", shortcut: "U" },
   { to: "/app/info", label: "Info", icon: "ℹ", shortcut: "?" },
 ];

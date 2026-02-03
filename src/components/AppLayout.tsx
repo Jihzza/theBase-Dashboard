@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { SidebarNav } from "@/components/SidebarNav";
 import { StatusIndicator } from "@/components/StatusIndicator";
+import { HubSwitcher } from "@/components/HubSwitcher";
 import { supabase } from "@/lib/supabase";
 
 export function AppLayout({
@@ -58,6 +59,7 @@ export function AppLayout({
             </button>
           </div>
 
+          <HubSwitcher />
           <SidebarNav collapsed={collapsed} />
 
           <div className="mt-auto grid gap-3">

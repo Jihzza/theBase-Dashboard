@@ -17,6 +17,10 @@ import BotsPage from "@/pages/Bots";
 import BotProfilesPage from "@/pages/BotProfiles";
 import BotFeedPage from "@/pages/BotFeed";
 import UserProfilePage from "@/pages/UserProfile";
+import HealthPage from "@/pages/Health";
+import SocialPage from "@/pages/Social";
+import MessagesPage from "@/pages/Messages";
+import PlanningPage from "@/pages/Planning";
 
 function App() {
   return (
@@ -34,6 +38,10 @@ function App() {
         <Route path="/app/calendar" element={<CalendarPage />} />
         <Route path="/app/logs" element={<LogsPage />} />
         <Route path="/app/todos" element={<TodosPage />} />
+        <Route path="/app/planning" element={<PlanningPage />} />
+        <Route path="/app/health" element={<HealthPage />} />
+        <Route path="/app/social" element={<SocialPage />} />
+        <Route path="/app/messages" element={<MessagesPage />} />
         <Route path="/app/bots" element={<BotsPage />} />
         <Route path="/app/bot-profiles" element={<BotProfilesPage />} />
         <Route path="/app/bot-feed" element={<BotFeedPage />} />
