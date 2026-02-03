@@ -40,9 +40,16 @@ export function StatusIndicator() {
     };
   }, []);
 
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(t);
+  }, []);
+
   const state = row?.state ?? "idle";
   const updatedAt = row?.updated_at ? new Date(row.updated_at).getTime() : 0;
-  const ageMs = updatedAt ? Date.now() - updatedAt : Number.POSITIVE_INFINITY;
+  const ageMs = updatedAt ? now - updatedAt : Number.POSITIVE_INFINITY;
 
   // Safety: if status hasn't been updated recently, treat as idle.
   const stale = ageMs > 10 * 60 * 1000;

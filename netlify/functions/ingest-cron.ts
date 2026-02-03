@@ -18,9 +18,9 @@ export const handler: Handler = async (event) => {
   if (!url) return { statusCode: 500, body: "Missing SUPABASE_URL (or VITE_SUPABASE_URL)" };
   if (!serviceKey) return { statusCode: 500, body: "Missing SUPABASE_SERVICE_ROLE_KEY" };
 
-  let payload: any;
+  let payload: Record<string, unknown>;
   try {
-    payload = JSON.parse(event.body || "{}");
+    payload = JSON.parse(event.body || "{}") as Record<string, unknown>;
   } catch {
     return { statusCode: 400, body: "Invalid JSON" };
   }

@@ -52,7 +52,7 @@ export default function LogsPage() {
           .from("logs")
           .select("*", { count: "exact" })
           .order("finished_at", { ascending: false })
-          .order("timestamp", { ascending: false })
+          .order("created_at", { ascending: false })
           .range((page - 1) * pageSize, page * pageSize - 1);
 
         if (project !== "all") queryBuilder = queryBuilder.eq("project", project);
@@ -65,8 +65,9 @@ export default function LogsPage() {
         if (error) throw error;
         setRows((data as LogEntry[]) ?? []);
         setTotal(count ?? null);
-      } catch (e: any) {
-        setError(e?.message ?? "Failed to load logs");
+      } catch (e: unknown) {
+        const message = e instanceof Error ? e.message : "Failed to load logs";
+        setError(message);
         setRows([]);
       } finally {
         setLoading(false);

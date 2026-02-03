@@ -6,7 +6,7 @@ import { requireSupabase, supabase } from "@/lib/supabase";
 
 type CronRow = {
   created_at: string;
-  payload: any;
+  payload: Record<string, unknown>;
 };
 
 export default function CronPage() {

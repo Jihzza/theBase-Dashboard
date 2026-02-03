@@ -1,7 +1,7 @@
 export type LogEntry = {
   id: string;
   created_at: string;
-  timestamp: string;
+  timestamp?: string | null;
   started_at?: string | null;
   finished_at?: string | null;
   project: string;

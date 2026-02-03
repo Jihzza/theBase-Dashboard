@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import html2pdf from "html2pdf.js";
 import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
@@ -60,7 +60,7 @@ export default function DocsPage() {
       visibility: active.visibility ?? "private",
       content: active.content ?? "",
     });
-  }, [activeId]);
+  }, [active, activeId]);
 
   useEffect(() => {
     (async () => {
@@ -127,59 +127,62 @@ export default function DocsPage() {
     }
   }
 
-  async function autosave(next: typeof draft) {
-    if (!active) return;
-    setSaving(true);
-    try {
-      const sb = requireSupabase();
-      const now = new Date().toISOString();
-      const tagsArr = next.tags
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean);
-      const assignedArr = next.assigned
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean);
+  const autosave = useCallback(
+    async (next: typeof draft) => {
+      if (!active) return;
+      setSaving(true);
+      try {
+        const sb = requireSupabase();
+        const now = new Date().toISOString();
+        const tagsArr = next.tags
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean);
+        const assignedArr = next.assigned
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean);
 
-      const { error } = await sb
-        .from("documents")
-        .update({
-          title: next.title,
-          project: next.project,
-          author: next.author,
-          tags: tagsArr.length ? tagsArr : null,
-          assigned: assignedArr.length ? assignedArr : null,
-          visibility: next.visibility,
-          content: next.content,
-          updated_at: now,
-        })
-        .eq("id", active.id);
-      if (error) throw error;
+        const { error } = await sb
+          .from("documents")
+          .update({
+            title: next.title,
+            project: next.project,
+            author: next.author,
+            tags: tagsArr.length ? tagsArr : null,
+            assigned: assignedArr.length ? assignedArr : null,
+            visibility: next.visibility,
+            content: next.content,
+            updated_at: now,
+          })
+          .eq("id", active.id);
+        if (error) throw error;
 
-      setDocs((prev) =>
-        prev.map((d) =>
-          d.id === active.id
-            ? {
-                ...d,
-                title: next.title,
-                project: next.project,
-                author: next.author,
-                tags: tagsArr.length ? tagsArr : null,
-                assigned: assignedArr.length ? assignedArr : null,
-                visibility: next.visibility,
-                content: next.content,
-                updated_at: now,
-              }
-            : d,
-        ),
-      );
-    } catch (e) {
-      console.warn(e);
-    } finally {
-      setSaving(false);
-    }
-  }
+        setDocs((prev) =>
+          prev.map((d) =>
+            d.id === active.id
+              ? {
+                  ...d,
+                  title: next.title,
+                  project: next.project,
+                  author: next.author,
+                  tags: tagsArr.length ? tagsArr : null,
+                  assigned: assignedArr.length ? assignedArr : null,
+                  visibility: next.visibility,
+                  content: next.content,
+                  updated_at: now,
+                }
+              : d,
+          ),
+        );
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setSaving(false);
+      }
+    },
+    [active],
+  );
 
   useEffect(() => {
     const handle = setTimeout(() => {
@@ -187,7 +190,7 @@ export default function DocsPage() {
       autosave(draft);
     }, 900);
     return () => clearTimeout(handle);
-  }, [draft]);
+  }, [draft, active, autosave]);
 
   function exec(cmd: string, value?: string) {
     document.execCommand(cmd, false, value);

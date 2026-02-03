@@ -30,7 +30,7 @@ export default function InstructionsPage() {
 
   useEffect(() => {
     if (current) setContent(current.content ?? "");
-  }, [current?.id]);
+  }, [current]);
 
   useEffect(() => {
     if (!category && categories.length) setCategory(categories[0]);
@@ -113,8 +113,9 @@ export default function InstructionsPage() {
                         if (error) throw error;
                         setRows((prev) => [...prev, data as InstrRow]);
                         setCategory(name);
-                      } catch (e: any) {
-                        setError(e?.message ?? "Failed to create category");
+                      } catch (e: unknown) {
+                        const message = e instanceof Error ? e.message : "Failed to create category";
+                        setError(message);
                       }
                     }}
                   >
@@ -156,8 +157,9 @@ export default function InstructionsPage() {
                           r.id === current.id ? { ...r, content, updated_at: now } : r,
                         ),
                       );
-                    } catch (e: any) {
-                      setError(e?.message ?? "Save failed");
+                    } catch (e: unknown) {
+                      const message = e instanceof Error ? e.message : "Save failed";
+                      setError(message);
                     } finally {
                       setSaving(false);
                     }

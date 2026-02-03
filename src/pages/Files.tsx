@@ -61,7 +61,7 @@ export default function FilesPage() {
       author: active.author ?? "",
       folder_id: active.folder_id ?? null,
     });
-  }, [activeId]);
+  }, [active, activeId]);
 
   useEffect(() => {
     (async () => {
@@ -135,8 +135,9 @@ export default function FilesPage() {
       const row = data as FileRow;
       setRows((prev) => [row, ...prev]);
       setActiveId(row.id);
-    } catch (e: any) {
-      setError(e?.message ?? "Failed to create");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to create";
+      setError(message);
     } finally {
       setSaving(false);
     }
@@ -187,8 +188,9 @@ export default function FilesPage() {
             : r,
         ),
       );
-    } catch (e: any) {
-      setError(e?.message ?? "Save failed");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Save failed";
+      setError(message);
     } finally {
       setSaving(false);
     }
@@ -208,8 +210,9 @@ export default function FilesPage() {
         .single();
       if (error) throw error;
       setFolders((prev) => [...prev, data as FolderRow]);
-    } catch (e: any) {
-      setError(e?.message ?? "Failed to create folder");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to create folder";
+      setError(message);
     } finally {
       setSaving(false);
     }
@@ -226,8 +229,9 @@ export default function FilesPage() {
       if (error) throw error;
       setRows((prev) => prev.filter((r) => r.id !== active.id));
       setActiveId(null);
-    } catch (e: any) {
-      setError(e?.message ?? "Delete failed");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Delete failed";
+      setError(message);
     } finally {
       setSaving(false);
     }

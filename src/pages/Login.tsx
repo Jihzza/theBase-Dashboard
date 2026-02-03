@@ -108,8 +108,9 @@ export default function LoginPage() {
 
                 // Redirect handled by auth state change; keep as fallback.
                 window.location.href = "/app";
-              } catch (err: any) {
-                setError(err?.message ?? (mode === "signup" ? "Failed to sign up" : "Failed to sign in"));
+              } catch (err: unknown) {
+                const message = err instanceof Error ? err.message : mode === "signup" ? "Failed to sign up" : "Failed to sign in";
+                setError(message);
               } finally {
                 setLoading(false);
               }
