@@ -23,7 +23,7 @@ export default function BotProfilesPage() {
             {profiles.map((p) => (
               <div key={p.name} className="rounded-xl border border-border bg-surface p-4">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full border border-border bg-surfaceAlt" />
+                  <div className="h-10 w-10 avatar-bot border border-border bg-surfaceAlt" />
                   <div>
                     <div className="text-sm font-semibold text-ink">{p.name}</div>
                     <div className="text-xs text-muted">{p.role}</div>

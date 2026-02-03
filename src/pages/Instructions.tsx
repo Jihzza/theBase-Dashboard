@@ -18,13 +18,13 @@ export default function InstructionsPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [project, setProject] = useState<string>("theBase");
+  const [category, setCategory] = useState<string>("");
   const projects = useMemo(() => Array.from(new Set(rows.map((r) => r.project))).sort(), [rows]);
   const categories = useMemo(
     () => Array.from(new Set(rows.filter((r) => r.project === project).map((r) => r.category))).sort(),
     [rows, project],
   );
-  const [project, setProject] = useState<string>("theBase");
-  const [category, setCategory] = useState<string>("");
   const current = rows.find((r) => r.project === project && r.category === category);
   const [content, setContent] = useState<string>("");
 

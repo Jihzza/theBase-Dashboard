@@ -26,6 +26,15 @@ html {
 body {
   background: var(--bg);
   color: var(--ink);
+  letter-spacing: 0.01em;
+}
+
+.avatar-human {
+  border-radius: 9999px;
+}
+
+.avatar-bot {
+  border-radius: 14px;
 }
 
 ::selection {

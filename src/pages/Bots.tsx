@@ -22,8 +22,13 @@ export default function BotsPage() {
           <div className="grid gap-3 md:grid-cols-2">
             {bots.map((bot) => (
               <div key={bot.name} className="rounded-xl border border-border bg-surface p-4">
-                <div className="text-sm font-semibold text-ink">{bot.name}</div>
-                <div className="mt-1 text-xs text-muted">Owner: {bot.owner}</div>
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 avatar-bot border border-border bg-surfaceAlt" />
+                  <div>
+                    <div className="text-sm font-semibold text-ink">{bot.name}</div>
+                    <div className="mt-1 text-xs text-muted">Owner: {bot.owner}</div>
+                  </div>
+                </div>
                 <div className="mt-3 text-xs text-muted">Status: {bot.status}</div>
                 <button className="mt-4 rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-semibold text-muted hover-soft">
                   Open channel

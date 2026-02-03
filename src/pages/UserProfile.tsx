@@ -14,10 +14,13 @@ export default function UserProfilePage() {
 
         <div className="grid gap-6 md:grid-cols-2">
           <Panel title="Profile" subtitle="Dummy content until user profile table is wired.">
-            <div className="grid gap-3 text-sm text-muted">
-              <div>Name: Rafael Matias</div>
-              <div>Role: Admin</div>
-              <div>Visibility: Private todos enabled</div>
+            <div className="flex items-center gap-4">
+              <div className="h-14 w-14 avatar-human border border-border bg-surfaceAlt" />
+              <div className="grid gap-2 text-sm text-muted">
+                <div>Name: Rafael Matias</div>
+                <div>Role: Admin</div>
+                <div>Visibility: Private todos enabled</div>
+              </div>
             </div>
           </Panel>
           <Panel title="Privacy" subtitle="Control who sees your tasks.">

@@ -40,11 +40,11 @@ export function AppLayout({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surfaceAlt text-sm font-bold text-[var(--accent-ink)]">
-                TB
+                S
               </div>
               {!collapsed ? (
                 <div>
-                  <div className="text-sm font-semibold text-ink">The Base</div>
+                  <div className="text-sm font-semibold text-ink">Saikan Hub</div>
                   <div className="text-[11px] text-muted">{title}</div>
                 </div>
               ) : null}

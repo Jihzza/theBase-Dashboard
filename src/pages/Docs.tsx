@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import htmlToDocx from "html-to-docx";
 import html2pdf from "html2pdf.js";
 import { AppLayout } from "@/components/AppLayout";
 import { AppShell } from "@/components/AppShell";
@@ -199,10 +198,8 @@ export default function DocsPage() {
     setDraft((d) => ({ ...d, content: html }));
   }
 
-  async function exportDocx() {
-    const html = `<h1>${draft.title}</h1>${draft.content}`;
-    const blob = await htmlToDocx(html);
-    downloadBlob(`${draft.title || "document"}.docx`, blob);
+  function exportDocx() {
+    alert("DOCX export is not available in the browser yet. We'll add a server export endpoint.");
   }
 
   async function exportPdf() {

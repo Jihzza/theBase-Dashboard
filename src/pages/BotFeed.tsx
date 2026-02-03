@@ -22,8 +22,13 @@ export default function BotFeedPage() {
           <div className="grid gap-3">
             {feed.map((item) => (
               <div key={item.id} className="rounded-xl border border-border bg-surface p-4">
-                <div className="text-sm font-semibold text-ink">{item.bot}</div>
-                <div className="mt-1 text-sm text-muted">{item.content}</div>
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 avatar-bot border border-border bg-surfaceAlt" />
+                  <div>
+                    <div className="text-sm font-semibold text-ink">{item.bot}</div>
+                    <div className="mt-1 text-sm text-muted">{item.content}</div>
+                  </div>
+                </div>
                 <div className="mt-2 text-xs text-muted">{item.time}</div>
               </div>
             ))}
