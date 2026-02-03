@@ -167,7 +167,7 @@ export default function DashboardPage() {
                 {filtered.map((l) => (
                   <details key={l.id} className="border-b border-border last:border-b-0">
                     <summary className="cursor-pointer list-none grid grid-cols-12 gap-3 px-5 py-4 hover:bg-surfaceAlt">
-                      <div className="col-span-4 text-sm text-ink">{fmt(l.timestamp)}</div>
+                      <div className="col-span-4 text-sm text-ink">{fmt(l.timestamp ?? "")}</div>
                       <div className="col-span-3 text-sm text-muted">{l.project}</div>
                       <div className="col-span-5 text-sm text-ink font-medium">
                         {l.title}
