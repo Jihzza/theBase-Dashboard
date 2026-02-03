@@ -52,7 +52,7 @@ export default function LogsPage() {
           .from("logs")
           .select("*", { count: "exact" })
           .order("finished_at", { ascending: false })
-          .order("timestamp", { ascending: false })
+          .order("created_at", { ascending: false })
           .range((page - 1) * pageSize, page * pageSize - 1);
 
         if (project !== "all") queryBuilder = queryBuilder.eq("project", project);

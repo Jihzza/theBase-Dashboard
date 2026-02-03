@@ -45,7 +45,8 @@ export default function DashboardPage() {
       const { data: rows, error } = await sb
         .from("logs")
         .select("*")
-        .order("timestamp", { ascending: false })
+        .order("finished_at", { ascending: false })
+        .order("created_at", { ascending: false })
         .limit(200);
 
       if (error) {
